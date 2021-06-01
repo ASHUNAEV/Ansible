@@ -44,7 +44,7 @@
 #        notify:
 #          - restart httpd
 
-    - name: apache server web listen on port 8080
+    - name: apache web  server listen on port 8080
       lineinfile: 
         dest: /etc/httpd/conf/httpd.conf 
         regexp: "^Listen 80" 
@@ -54,14 +54,14 @@
       notify:
         - restart httpd
 
-#    - name: apache web server virtualhost on port 8081
+#    - name: apache web server virtualhost on port 8080
 #      lineinfile: 
-#        dest=/etc/apache2/sites-available/000-default.conf 
-#        regexp="^<VirtualHost \*:80>" 
-#        line="<VirtualHost *:8080>" 
-#        state=present
+#        dest:
+#        regexp:
+#        line: 
+#        state: present
 #      notify:
-#        - restart apache2
+#        - restart httpd
 
   handlers:
     - name: restart apache web serber
