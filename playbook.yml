@@ -1,0 +1,76 @@
+---
+- hosts: webserver
+  connection: ssh
+  remote_user: centos
+  become_method: sudo
+  become: yes
+
+  tasks:
+    - name: Installs apache web server
+      yum: 
+        name: httpd 
+        state: latest
+    
+    - name: Start apache service
+      service: 
+        name: httpd
+        state: started
+
+#-------------------------------------Make files---------------------------
+#    - name: Create empty file index.html
+#      file:
+#        path: "/var/www/html/index.html"
+#        state: touch
+
+
+
+
+
+    - name: Create a file index.html
+      copy:
+        dest: "/var/www/html/index.html"
+        content: |
+          “Welcome to my First web server”
+
+
+
+#------------------------------------Port Apache---------------------
+
+
+#    - name: enabled mod_rewrite
+#        httpd_module:
+#          name: rewrite 
+#          state:present
+#        notify:
+#          - restart httpd
+
+    - name: apache server web listen on port 8080
+      lineinfile: 
+        dest: /etc/httpd/conf/httpd.conf 
+        regexp: "^Listen 80" 
+        line: "Listen 8080" 
+        state: present
+
+      notify:
+        - restart httpd
+
+#    - name: apache web server virtualhost on port 8081
+#      lineinfile: 
+#        dest=/etc/apache2/sites-available/000-default.conf 
+#        regexp="^<VirtualHost \*:80>" 
+#        line="<VirtualHost *:8080>" 
+#        state=present
+#      notify:
+#        - restart apache2
+
+  handlers:
+    - name: restart apache web serber
+      service: 
+        name: httpd
+        state: restarted
+
+#-------------------------------------- firewalld------------------------------
+    - firewalld:
+        port: 8080/tcp
+        permanent: true
+        state: enabled

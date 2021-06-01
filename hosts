@@ -1,0 +1,9 @@
+[webserver]
+worker1 
+
+[server]
+worker2 
+
+[nginx]
+worker1
+worker2
